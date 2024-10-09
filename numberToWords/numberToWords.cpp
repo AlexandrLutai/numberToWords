@@ -2,10 +2,11 @@
 //
 
 #include <iostream>
-
+#include "numberToWord.h"
 int main()
 {
-    std::cout << "Hello World!\n";
+    setlocale(LC_ALL, "Russian");
+    std::cout << changeEnding("Два", "e");
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
