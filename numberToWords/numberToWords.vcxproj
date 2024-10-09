@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="numberToWord.cpp" />
     <ClCompile Include="numberToWords.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="numberToWord.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
