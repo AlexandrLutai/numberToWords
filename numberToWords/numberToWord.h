@@ -6,5 +6,6 @@ namespace constants {
 	const std::string ranks[5]{ "Десять", "Сто", "Тысяча", "Миллион", "Миллиард" };
 }
 std::string changeEnding(std::string stringBeingChenged, std::string ending);
+std::string printRubles(short lastDigit, bool execution = false);
 
 #endif // !NUMBERTOWORD

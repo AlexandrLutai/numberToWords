@@ -20,3 +20,19 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending) {
 	return stringBeingChenged;
 }
 
+std::string printRubles(short lastDigit, bool execution = false) {
+	if (lastDigit >= 5 || execution) {
+		return " Рублей.";
+	}
+	else if (lastDigit == 1) {
+		return " Рубль.";
+	}
+	else {
+		return " Рубля.";
+	}
+};
+
+void printUnitsAsWord(int fullNumber, int& numberDigit) {
+
+}
+
