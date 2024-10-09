@@ -20,8 +20,8 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending) {
 	return stringBeingChenged;
 }
 
-std::string printRubles(short lastDigit, bool execution = false) {
-	if (lastDigit >= 5 || execution) {
+std::string getRubles(short lastDigit, bool execution) {
+	if (lastDigit == 0 ||  lastDigit >= 5 || execution) {
 		return " Рублей.";
 	}
 	else if (lastDigit == 1) {
@@ -32,19 +32,38 @@ std::string printRubles(short lastDigit, bool execution = false) {
 	}
 };
 
-std::string dozensExecution(int lastNumber) {
-	if (lastNumber == 0) return "Десять";
-	std::string numberAsWord{ constants::units[lastNumber - 1] };
+std::string dozensExecution(int lastNumber, int& numberDigit) 
+{
+	++numberDigit;
+	if (lastNumber == 0) return " Десять";
+	std::string numberAsWord{ constants::units[lastNumber] };
 	if (lastNumber == 2) {
 		numberAsWord = changeEnding(numberAsWord, "е");
 	}
 	else if (lastNumber >= 4 && lastNumber <= 9) {
-		numberAsWord.erase(numberAsWord.end());
+		numberAsWord.erase(numberAsWord.end() - 1 );
 	}
-	return numberAsWord + "надцать";
+	return " " + numberAsWord + "надцать ";
 }
 
-std::string printUnitsAsWord(int fullNumber, int& numberDigit) {
-
+std::string getUnitsAsWord(int fullNumber, int& numberDigit) {
+	int lastDigit{fullNumber % 10};
+	std::string numberAsWord{};
+	bool execution{ false };
+	if ((fullNumber / 10) % 10 == 1)
+	{
+		numberAsWord =  dozensExecution(lastDigit, numberDigit);
+		execution = true;
+	
+	}
+	else if (fullNumber > 10 && lastDigit == 0) {
+		numberAsWord = "";
+	}
+	else {
+		numberAsWord = " " + constants::units[lastDigit];
+	}
+	numberAsWord = numberAsWord + getRubles(lastDigit, execution);
+	++numberDigit;
+	return numberAsWord;
 }
 

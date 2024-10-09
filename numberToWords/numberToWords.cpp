@@ -6,7 +6,12 @@
 int main()
 {
     setlocale(LC_ALL, "Russian");
-    std::cout << changeEnding("Два", "e");
+    int a{ 0 };
+    for (size_t i = 0; i < 20; i++)
+    {
+        std::cout << getUnitsAsWord(i, a) << "\n";
+    }
+    
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
