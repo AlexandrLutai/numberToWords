@@ -32,7 +32,19 @@ std::string printRubles(short lastDigit, bool execution = false) {
 	}
 };
 
-void printUnitsAsWord(int fullNumber, int& numberDigit) {
+std::string dozensExecution(int lastNumber) {
+	if (lastNumber == 0) return "Десять";
+	std::string numberAsWord{ constants::units[lastNumber - 1] };
+	if (lastNumber == 2) {
+		numberAsWord = changeEnding(numberAsWord, "е");
+	}
+	else if (lastNumber >= 4 && lastNumber <= 9) {
+		numberAsWord.erase(numberAsWord.end());
+	}
+	return numberAsWord + "надцать";
+}
+
+std::string printUnitsAsWord(int fullNumber, int& numberDigit) {
 
 }
 
