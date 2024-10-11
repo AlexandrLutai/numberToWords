@@ -46,11 +46,11 @@ std::string dozensExecution(int lastNumber, int& numberDigit)
 	return " " + numberAsWord + "надцать ";
 }
 
-std::string getUnitsAsWord(int fullNumber,int& numberDigit) {
+std::string getUnitsAsWord(int fullNumber,int& numberDigit, int& fullNumberDigit) {
 	int lastDigit{fullNumber % 10};
 	std::string numberAsWord{};
 	bool execution{ false };
-	if ((fullNumber / 10) % 10 == 1)
+	if ((fullNumber / 10) % 10 == 1 && numberDigit == 0)
 	{
 		numberAsWord =  dozensExecution(lastDigit, numberDigit);
 		execution = true;
@@ -60,6 +60,7 @@ std::string getUnitsAsWord(int fullNumber,int& numberDigit) {
 	else {
 		numberAsWord = numberAsWord + " " + constants::units[lastDigit][numberDigit];
 	}
+	
 	++numberDigit;
 	return numberAsWord;
 }

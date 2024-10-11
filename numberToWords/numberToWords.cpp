@@ -6,12 +6,21 @@
 int main()
 {
     setlocale(LC_ALL, "Russian");
-    int a{ 0 };
-    for (size_t i = 0; i < 20; i++)
+    int digit{ 0 };
+    int fullDigit{ 0 };
+    int number{ 21 };
+    std::string word{ "" };
+    do
     {
-        std::cout << getUnitsAsWord(i, a);
-        if (a == 3) a = 0;
-    }
+        
+       word = getUnitsAsWord(number, digit, fullDigit) + word ;
+        if (digit >= 3) digit = 0;
+        number /= 10;
+    } while (number > 1);
+
+    std::cout << word;
+       
+    
     
 }
 
