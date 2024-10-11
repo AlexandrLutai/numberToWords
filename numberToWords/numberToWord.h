@@ -15,11 +15,8 @@ namespace constants {
 		{"Девять", "Девяносто", "Девятьсот"}
 	};
 	
-	const std::string ranks[4]{"Тысяч", "Миллион", "Миллиард"};
+	const std::string ranks[5]{"Тысяч", "Миллион", "Миллиард", "Триллион"};
 }
-std::string changeEnding(std::string stringBeingChenged, std::string ending);
-std::string getRubles(short lastDigit, bool execution);
-std::string getThousand(short lastDigit, bool execution);
-std::string dozensExecution(int lastNumber, int numberDigit);
-std::string getUnitsAsWord(int& fullNumber, int& numberDigit, int& fullNumberDigit);
+
+std::string getNumberAsWords(unsigned long long number);
 #endif // !NUMBERTOWORD

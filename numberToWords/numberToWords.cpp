@@ -6,18 +6,12 @@
 int main()
 {
     setlocale(LC_ALL, "Russian");
-    int digit{ 0 };
-    int fullDigit{ 0 };
-    int number{ 1110 };
-    std::string word{ "" };
-    do
-    {
-        
-       word = getUnitsAsWord(number, digit, fullDigit) + word ;
-        if (digit >= 3) digit = 0;
-    } while (number > 0);
 
-    std::cout << word;
+    unsigned long long number[13]{ 1, 54,236,1432,22768 ,984234, 7832000,65798345, 145847345,2345432965, 87324444876, 153034055001, 9736023454555 };
+
+    for (int i = 0; i < 1; i++) {
+        std::cout << getNumberAsWords(9733602345455514) << "\n";
+    }
        
     
     

@@ -23,8 +23,8 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending) {
 //Получение слова рублей.
 //lastDigit - число, от которого зависит вид слова "Рубль".
 //exeption - Исключение от 10 до 19
-std::string getRubles(short lastDigit, bool execution) {
-	if (lastDigit == 0 ||  lastDigit >= 5 || execution) {
+std::string getRubles(short lastDigit, bool exeption) {
+	if (lastDigit == 0 ||  lastDigit >= 5 || exeption) {
 		return " Рублей.";
 	}
 	else if (lastDigit == 1) {
@@ -35,20 +35,49 @@ std::string getRubles(short lastDigit, bool execution) {
 	}
 };
 
-std::string getThousand(short lastDigit, bool execution) {
+std::string thousandExeption(short lastDigit,int numberDigit, int fullNumberDigit) {
+	if (fullNumberDigit == 3) {
+		switch (lastDigit)
+		{
+		case 1:
+			return "Одна";
+		case 2:
+			return "Две";
+		
+		}
+	}
+	return constants::units[lastDigit][numberDigit];
+}
+
+std::string getThousand(short lastDigit, bool exeption) {
 	std::string thousand{ constants::ranks[0] };
-	if (lastDigit == 0 || lastDigit >= 5 || execution) {
+	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
 		return " " + thousand;
 	}
 	else if (lastDigit == 1) {
-		return " "+thousand + "а";
+		return " " +thousand + "а";
 	}
 	else {
 		return  " " + thousand + "и";
 	}
 }
 
+std::string getAnyRanks(short fullNumberDigit, short lastDigit, bool exeption) {
+	std::string word{constants::ranks[fullNumberDigit -1]};
+	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
+		return " " + word + "ов";
+	}
+	else if (lastDigit == 1) {
+		return " " + word;
+		
+	}
+	else {
+		return " " + word + "а";
+	}
+}
+
 std::string getWordDigit(short fullNumberDigit,short lastDigit, bool exeption) {
+	fullNumberDigit /= 3;
 	switch (fullNumberDigit)
 	{
 	case 0:
@@ -58,14 +87,15 @@ std::string getWordDigit(short fullNumberDigit,short lastDigit, bool exeption) {
 		return getThousand(lastDigit, exeption);
 		break;
 	default:
+		return getAnyRanks(fullNumberDigit,lastDigit, exeption);
 		break;
 	}
 }
 
-std::string dozensExecution(int lastNumber, int numberDigit) 
+std::string dozensExeption(int lastNumber, int numberDigit)
 {
 	++numberDigit;
-	if (lastNumber == 0) return " Десять";
+	if (lastNumber == 0) return "Десять";
 	std::string numberAsWord{ constants::units[lastNumber][0] };
 	if (lastNumber == 2) {
 		numberAsWord = changeEnding(numberAsWord, "е");
@@ -73,32 +103,50 @@ std::string dozensExecution(int lastNumber, int numberDigit)
 	else if (lastNumber >= 4 && lastNumber <= 9) {
 		numberAsWord.erase(numberAsWord.end() - 1 );
 	}
-	return " " + numberAsWord + "надцать ";
+	return numberAsWord + "надцать";
 }
 
-std::string getUnitsAsWord(int& fullNumber,int& numberDigit, int& fullNumberDigit) {
+void changeParams(unsigned long long& fullNumber, int& numberDigit, int& fullNumberDigit) {
+	++numberDigit;
+	++fullNumberDigit;
+	fullNumber /= 10;
+}
+
+std::string getUnitsAsWord(unsigned long long& fullNumber,int& numberDigit, int& fullNumberDigit) {
 	int lastDigit{fullNumber % 10};
 	std::string numberAsWord{};
 	bool exeption{ (fullNumber / 10) % 10 == 1 && numberDigit == 0 };
 	
 	if (fullNumberDigit % 3 == 0) {
-		numberAsWord = getWordDigit(fullNumberDigit / 3, lastDigit, exeption);
+		numberAsWord = getWordDigit(fullNumberDigit, lastDigit, exeption);
 	}
 	if (exeption)
 	{
-		numberAsWord =  dozensExecution(lastDigit, numberDigit) + " " + numberAsWord;
-		++numberDigit;
-		fullNumber /= 10;
+		numberAsWord =  dozensExeption(lastDigit, numberDigit) +  numberAsWord;
+		changeParams(fullNumber, numberDigit, fullNumberDigit);
 	}
 	else {
-		numberAsWord =  constants::units[lastDigit][numberDigit] + " " + numberAsWord;
+		numberAsWord = thousandExeption(lastDigit,numberDigit,fullNumberDigit) +  numberAsWord;
 	}
 
 
-	++fullNumberDigit;
-	++numberDigit;
-	fullNumber /= 10;
-	
-	return numberAsWord;
+	changeParams(fullNumber, numberDigit, fullNumberDigit);
+	if (numberDigit >= 3) numberDigit = 0;
+	return numberAsWord + " ";
 }
 
+
+std::string getNumberAsWords(unsigned long long number) {
+	int digit{ 0 };
+	int fullDigit{ 0 };
+	std::string word{ "" };
+	do
+	{
+		word = getUnitsAsWord(number, digit, fullDigit) + word;
+		
+	} while (number > 0);
+
+	return word;
+}
+
+//Доработать окончание числительных двЕ-одна тысячи
