@@ -8,15 +8,14 @@ int main()
     setlocale(LC_ALL, "Russian");
     int digit{ 0 };
     int fullDigit{ 0 };
-    int number{ 10 };
+    int number{ 1110 };
     std::string word{ "" };
     do
     {
         
        word = getUnitsAsWord(number, digit, fullDigit) + word ;
         if (digit >= 3) digit = 0;
-        number /= 10;
-    } while (number >= 1);
+    } while (number > 0);
 
     std::cout << word;
        

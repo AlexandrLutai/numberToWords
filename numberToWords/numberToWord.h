@@ -21,5 +21,5 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending);
 std::string getRubles(short lastDigit, bool execution);
 std::string getThousand(short lastDigit, bool execution);
 std::string dozensExecution(int lastNumber, int numberDigit);
-std::string getUnitsAsWord(int fullNumber, int& numberDigit, int& fullNumberDigit);
+std::string getUnitsAsWord(int& fullNumber, int& numberDigit, int& fullNumberDigit);
 #endif // !NUMBERTOWORD

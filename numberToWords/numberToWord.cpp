@@ -20,7 +20,9 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending) {
 	return stringBeingChenged;
 }
 
-
+//Получение слова рублей.
+//lastDigit - число, от которого зависит вид слова "Рубль".
+//exeption - Исключение от 10 до 19
 std::string getRubles(short lastDigit, bool execution) {
 	if (lastDigit == 0 ||  lastDigit >= 5 || execution) {
 		return " Рублей.";
@@ -74,10 +76,11 @@ std::string dozensExecution(int lastNumber, int numberDigit)
 	return " " + numberAsWord + "надцать ";
 }
 
-std::string getUnitsAsWord(int fullNumber,int& numberDigit, int& fullNumberDigit) {
+std::string getUnitsAsWord(int& fullNumber,int& numberDigit, int& fullNumberDigit) {
 	int lastDigit{fullNumber % 10};
 	std::string numberAsWord{};
 	bool exeption{ (fullNumber / 10) % 10 == 1 && numberDigit == 0 };
+	
 	if (fullNumberDigit % 3 == 0) {
 		numberAsWord = getWordDigit(fullNumberDigit / 3, lastDigit, exeption);
 	}
@@ -85,12 +88,17 @@ std::string getUnitsAsWord(int fullNumber,int& numberDigit, int& fullNumberDigit
 	{
 		numberAsWord =  dozensExecution(lastDigit, numberDigit) + " " + numberAsWord;
 		++numberDigit;
+		fullNumber /= 10;
 	}
 	else {
 		numberAsWord =  constants::units[lastDigit][numberDigit] + " " + numberAsWord;
 	}
+
+
 	++fullNumberDigit;
 	++numberDigit;
+	fullNumber /= 10;
+	
 	return numberAsWord;
 }
 
