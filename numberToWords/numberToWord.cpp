@@ -35,21 +35,32 @@ std::string getRubles(short lastDigit, bool execution) {
 
 std::string getThousand(short lastDigit, bool execution) {
 	std::string thousand{ constants::ranks[0] };
+	if (lastDigit == 0 || lastDigit >= 5 || execution) {
+		return " " + thousand;
+	}
+	else if (lastDigit == 1) {
+		return " "+thousand + "а";
+	}
+	else {
+		return  " " + thousand + "и";
+	}
 }
 
-std::string getWordDigit(short fullNumberDigit,short lastDigit, bool execution) {
+std::string getWordDigit(short fullNumberDigit,short lastDigit, bool exeption) {
 	switch (fullNumberDigit)
 	{
 	case 0:
-		return getRubles(lastDigit, execution);
+		return getRubles(lastDigit, exeption);
 		break;
 	case 1:
+		return getThousand(lastDigit, exeption);
+		break;
 	default:
 		break;
 	}
 }
 
-std::string dozensExecution(int lastNumber, int& numberDigit) 
+std::string dozensExecution(int lastNumber, int numberDigit) 
 {
 	++numberDigit;
 	if (lastNumber == 0) return " ƒес€ть";
@@ -66,20 +77,19 @@ std::string dozensExecution(int lastNumber, int& numberDigit)
 std::string getUnitsAsWord(int fullNumber,int& numberDigit, int& fullNumberDigit) {
 	int lastDigit{fullNumber % 10};
 	std::string numberAsWord{};
-	bool execution{ false };
+	bool exeption{ (fullNumber / 10) % 10 == 1 && numberDigit == 0 };
 	if (fullNumberDigit % 3 == 0) {
-
+		numberAsWord = getWordDigit(fullNumberDigit / 3, lastDigit, exeption);
 	}
-	if ((fullNumber / 10) % 10 == 1 && numberDigit == 0)
+	if (exeption)
 	{
-		numberAsWord =  dozensExecution(lastDigit, numberDigit);
-		execution = true;
+		numberAsWord =  dozensExecution(lastDigit, numberDigit) + " " + numberAsWord;
 		++numberDigit;
 	}
 	else {
-		numberAsWord = numberAsWord + " " + constants::units[lastDigit][numberDigit];
+		numberAsWord =  constants::units[lastDigit][numberDigit] + " " + numberAsWord;
 	}
-	
+	++fullNumberDigit;
 	++numberDigit;
 	return numberAsWord;
 }
