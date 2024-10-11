@@ -20,6 +20,7 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending) {
 	return stringBeingChenged;
 }
 
+
 std::string getRubles(short lastDigit, bool execution) {
 	if (lastDigit == 0 ||  lastDigit >= 5 || execution) {
 		return " Рублей.";
@@ -31,6 +32,22 @@ std::string getRubles(short lastDigit, bool execution) {
 		return " Рубля.";
 	}
 };
+
+std::string getThousand(short lastDigit, bool execution) {
+	std::string thousand{ constants::ranks[0] };
+}
+
+std::string getWordDigit(short fullNumberDigit,short lastDigit, bool execution) {
+	switch (fullNumberDigit)
+	{
+	case 0:
+		return getRubles(lastDigit, execution);
+		break;
+	case 1:
+	default:
+		break;
+	}
+}
 
 std::string dozensExecution(int lastNumber, int& numberDigit) 
 {
@@ -50,12 +67,14 @@ std::string getUnitsAsWord(int fullNumber,int& numberDigit, int& fullNumberDigit
 	int lastDigit{fullNumber % 10};
 	std::string numberAsWord{};
 	bool execution{ false };
+	if (fullNumberDigit % 3 == 0) {
+
+	}
 	if ((fullNumber / 10) % 10 == 1 && numberDigit == 0)
 	{
 		numberAsWord =  dozensExecution(lastDigit, numberDigit);
 		execution = true;
 		++numberDigit;
-	
 	}
 	else {
 		numberAsWord = numberAsWord + " " + constants::units[lastDigit][numberDigit];

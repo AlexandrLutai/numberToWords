@@ -14,11 +14,12 @@ namespace constants {
 		{"Восемь", "Восемьдесят", "Восемьсот"},
 		{"Девять", "Девяносто", "Девятьсот"}
 	};
-	//const std::string units[10]{ "Ноль","Один", "Два", "Три", "Четыре", "Пять", "Шесть", "Семь", "Восемь", "Девять"};
-	//const std::string ranks[4]{"Сто", "Тысяча", "Миллион", "Миллиард" };
+	
+	const std::string ranks[4]{"Тысяч", "Миллион", "Миллиард"};
 }
 std::string changeEnding(std::string stringBeingChenged, std::string ending);
 std::string getRubles(short lastDigit, bool execution);
+std::string getThousand(short lastDigit, bool execution);
 std::string dozensExecution(int lastNumber, int& numberDigit);
 std::string getUnitsAsWord(int fullNumber, int& numberDigit, int& fullNumberDigit);
 #endif // !NUMBERTOWORD
