@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClCompile Include="numberToWord.cpp" />
     <ClCompile Include="numberToWords.cpp" />
+    <ClCompile Include="testsNumberToWord.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="numberToWord.h" />
+    <ClInclude Include="testsNumberToWord.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

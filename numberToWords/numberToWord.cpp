@@ -25,16 +25,17 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending) {
 //exeption - Исключение от 10 до 19
 std::string getRubles(short lastDigit, bool exeption) {
 	if (lastDigit == 0 ||  lastDigit >= 5 || exeption) {
-		return " Рублей.";
+		return "Рублей.";
 	}
 	else if (lastDigit == 1) {
-		return " Рубль.";
+		return "Рубль.";
 	}
 	else {
-		return " Рубля.";
+		return "Рубля.";
 	}
 };
-
+//Выводит слово для разряда тысяч.
+//Обробатывается два исключения, для 1 и 2
 std::string thousandExeption(short lastDigit,int numberDigit, int fullNumberDigit) {
 	if (fullNumberDigit == 3) {
 		switch (lastDigit)
@@ -52,27 +53,27 @@ std::string thousandExeption(short lastDigit,int numberDigit, int fullNumberDigi
 std::string getThousand(short lastDigit, bool exeption) {
 	std::string thousand{ constants::ranks[0] };
 	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
-		return " " + thousand;
+		return thousand + " ";
 	}
 	else if (lastDigit == 1) {
-		return " " +thousand + "а";
+		return thousand + "а ";
 	}
 	else {
-		return  " " + thousand + "и";
+		return  thousand + "и ";
 	}
 }
 
 std::string getAnyRanks(short fullNumberDigit, short lastDigit, bool exeption) {
 	std::string word{constants::ranks[fullNumberDigit -1]};
 	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
-		return " " + word + "ов";
+		return word + "ов ";
 	}
 	else if (lastDigit == 1) {
-		return " " + word;
+		return word + " ";
 		
 	}
 	else {
-		return " " + word + "а";
+		return word + "а ";
 	}
 }
 
@@ -95,7 +96,7 @@ std::string getWordDigit(short fullNumberDigit,short lastDigit, bool exeption) {
 std::string dozensExeption(int lastNumber, int numberDigit)
 {
 	++numberDigit;
-	if (lastNumber == 0) return "Десять";
+	if (lastNumber == 0) return "Десять ";
 	std::string numberAsWord{ constants::units[lastNumber][0] };
 	if (lastNumber == 2) {
 		numberAsWord = changeEnding(numberAsWord, "е");
@@ -116,30 +117,35 @@ std::string getUnitsAsWord(unsigned long long& fullNumber,int& numberDigit, int&
 	int lastDigit{fullNumber % 10};
 	std::string numberAsWord{};
 	bool exeption{ (fullNumber / 10) % 10 == 1 && numberDigit == 0 };
-	
+	std::string space{ lastDigit == 0 ? "" : " " };
 	if (fullNumberDigit % 3 == 0) {
 		numberAsWord = getWordDigit(fullNumberDigit, lastDigit, exeption);
 	}
 	if (exeption)
 	{
-		numberAsWord =  dozensExeption(lastDigit, numberDigit) +  numberAsWord;
+		numberAsWord =  dozensExeption(lastDigit, numberDigit) + space + numberAsWord ;
 		changeParams(fullNumber, numberDigit, fullNumberDigit);
 	}
 	else {
-		numberAsWord = thousandExeption(lastDigit,numberDigit,fullNumberDigit) +  numberAsWord;
+		
+		numberAsWord = thousandExeption(lastDigit,numberDigit,fullNumberDigit) + space + numberAsWord;
 	}
 
 
 	changeParams(fullNumber, numberDigit, fullNumberDigit);
-	if (numberDigit >= 3) numberDigit = 0;
-	return numberAsWord + " ";
+	if (numberDigit == 3) numberDigit = 0;
+	return numberAsWord;
 }
 
 
+
 std::string getNumberAsWords(unsigned long long number) {
+	if (!number) return "Ноль Рублей.";
 	int digit{ 0 };
 	int fullDigit{ 0 };
+	
 	std::string word{ "" };
+
 	do
 	{
 		word = getUnitsAsWord(number, digit, fullDigit) + word;

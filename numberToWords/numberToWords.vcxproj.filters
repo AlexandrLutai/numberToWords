@@ -21,9 +21,15 @@
     <ClCompile Include="numberToWord.cpp">
       <Filter>Файлы заголовков</Filter>
     </ClCompile>
+    <ClCompile Include="testsNumberToWord.cpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="numberToWord.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="testsNumberToWord.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
