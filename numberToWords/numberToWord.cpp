@@ -34,7 +34,7 @@ std::string getRubles(short lastDigit, bool exeption) {
 		return "Рубля.";
 	}
 };
-//Выводит слово для разряда тысяч.
+//Выводит число словом для разряда тысяч.
 //Обробатывается два исключения, для 1 и 2
 std::string thousandExeption(short lastDigit,int numberDigit, int fullNumberDigit) {
 	if (fullNumberDigit == 3) {
@@ -50,6 +50,7 @@ std::string thousandExeption(short lastDigit,int numberDigit, int fullNumberDigi
 	return constants::units[lastDigit][numberDigit];
 }
 
+//Получение слова для разряда тысяч.
 std::string getThousand(short lastDigit, bool exeption) {
 	std::string thousand{ constants::ranks[0] };
 	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
@@ -62,9 +63,9 @@ std::string getThousand(short lastDigit, bool exeption) {
 		return  thousand + "и ";
 	}
 }
-
+//Получения слова для всех разрядов, кроме тысяч. 
 std::string getAnyRanks(short fullNumberDigit, short lastDigit, bool exeption) {
-	std::string word{constants::ranks[fullNumberDigit -1]};
+	std::string word{constants::ranks[fullNumberDigit -1]}; 
 	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
 		return word + "ов ";
 	}
@@ -76,7 +77,7 @@ std::string getAnyRanks(short fullNumberDigit, short lastDigit, bool exeption) {
 		return word + "а ";
 	}
 }
-
+//Получение слова для разрядов числа от тысячи.
 std::string getWordDigit(short fullNumberDigit,short lastDigit, bool exeption) {
 	fullNumberDigit /= 3;
 	switch (fullNumberDigit)
@@ -92,11 +93,11 @@ std::string getWordDigit(short fullNumberDigit,short lastDigit, bool exeption) {
 		break;
 	}
 }
-
+//Обработка исключений для промежутка 10 <= number <=  19.
 std::string dozensExeption(int lastNumber, int numberDigit)
 {
 	++numberDigit;
-	if (lastNumber == 0) return "Десять ";
+	if (lastNumber == 0) return "Десять "; 
 	std::string numberAsWord{ constants::units[lastNumber][0] };
 	if (lastNumber == 2) {
 		numberAsWord = changeEnding(numberAsWord, "е");
@@ -107,6 +108,7 @@ std::string dozensExeption(int lastNumber, int numberDigit)
 	return numberAsWord + "надцать";
 }
 
+//Изменение основных параметров.
 void changeParams(unsigned long long& fullNumber, int& numberDigit, int& fullNumberDigit) {
 	++numberDigit;
 	++fullNumberDigit;
@@ -155,4 +157,3 @@ std::string getNumberAsWords(unsigned long long number) {
 	return word;
 }
 
-//Доработать окончание числительных двЕ-одна тысячи
