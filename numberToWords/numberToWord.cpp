@@ -25,12 +25,13 @@ std::string changeEnding(std::string stringBeingChenged, std::string ending) {
 //exeption - Исключение от 10 до 19
 std::string getRubles(short lastDigit, bool exeption) {
 	if (lastDigit == 0 ||  lastDigit >= 5 || exeption) {
-		return "Рублей.";
+		return "Рублей."; 
+	
 	}
-	else if (lastDigit == 1) {
+	if (lastDigit == 1) {
 		return "Рубль.";
 	}
-	else {
+	else if( lastDigit >= 2 && lastDigit<=4) {
 		return "Рубля.";
 	}
 };
