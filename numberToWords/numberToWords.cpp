@@ -8,7 +8,7 @@
 int main()
 {
     setlocale(LC_ALL, "Russian");
-
+    ntwTests::runTests();
        
     
     
