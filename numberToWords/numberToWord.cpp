@@ -11,40 +11,20 @@ std::string getNumberNameWithValutes(unsigned short, unsigned short, unsigned sh
 
 
 
-std::string getNumberAsWords(unsigned long number) 
-{
-	if (!number) return "Ноль Рублей.";
-	unsigned short numberOfDigit{ 0 };
-	unsigned short digitArray[3];
-	//Обработка самой правой тройки чисел с валютой.
-	getDigitsInArray(number, digitArray, 3);
-	std::string numberName{getNumberNameWithValutes(digitArray[0],digitArray[1],digitArray[2])};
-	changeParams(&number);
-
-	while (number > 0)
-	{
-		//Обработка чисел, начиная с разряда тысяч
-		getDigitsInArray(number,digitArray, 3);
-		numberName = getNumberName(digitArray[0],digitArray[1],digitArray[2], numberOfDigit / 3) + numberName;
-		changeParams( &number, &numberOfDigit );
-	} 
-
-	return numberName;
-}
-
-
-void changeParams(unsigned long* number,unsigned short* numberOfDigit)
-{
-	if(numberOfDigit)*numberOfDigit += 3;
-	*number /= 1000;
-}
-void getDigitsInArray(unsigned long number, unsigned short* numberArray,int arrSize) 
-{
-	for (int i = 0; i < arrSize; i++)
-	{
-		numberArray[i] = number % 10;
-		number /= 10;
+//Выводит число словом для разряда тысяч.
+//Обробатывается два исключения, для 1 и 2
+std::string thousandExeption(short lastDigit,int numberDigit, int fullNumberDigit) {
+	if (fullNumberDigit == 3) {
+		switch (lastDigit)
+		{
+		case 1:
+			return "Одна";
+		case 2:
+			return "Две";
+		
+		}
 	}
+	return constants::units[lastDigit][numberDigit];
 }
 
 //Получение названий чисел
@@ -123,19 +103,3 @@ std::string getNumberNameWithValutes(unsigned short unit, unsigned short ten, un
 
 
 
-//std::string getRankName(unsigned short unit, bool tenExeption, unsigned short digitRank)
-//{
-//	switch (unit)
-//	{
-//	case 1:
-//		break;
-//	case 2:
-//	case 3:
-//	case 4:
-//
-//		break;
-//	default:
-//		break;
-//	}
-//	return constants::ranksNames[digitRank][!tenExeption * unit];
-//}
