@@ -2,158 +2,140 @@
 #include<iostream>
 
 
-// !!ВОПРОС ПО ЭФФЕКТИВНОСТИ 
-//Изменяет окончание переданной строки - stringBeingChenged.
-//ending - окончание, на которое будет заменяться исходное.
-std::string changeEnding(std::string stringBeingChenged, std::string ending) {
-	
-		short endChangedString = stringBeingChenged.size() - 1;
-		short endEndingString = ending.size() - 1 ;
-		short iteration{ 0 };
 
-		do
-		{
-			stringBeingChenged[endChangedString--] = ending[endEndingString--];
-			iteration++;
-		} while (iteration <= endEndingString);
-	
-	return stringBeingChenged;
-}
+void getDigitsInArray(unsigned long , unsigned short*, int );
+void changeParams(unsigned long* number, unsigned short* numberOfDigit = nullptr);
+std::string getNumberName(unsigned short, unsigned short , unsigned short , unsigned short );
+std::string getNumberNameWithValutes(unsigned short, unsigned short, unsigned short);
 
-//Получение слова рублей.
-//lastDigit - число, от которого зависит вид слова "Рубль".
-//exeption - Исключение от 10 до 19
-std::string getRubles(short lastDigit, bool exeption) {
-	if (lastDigit == 0 ||  lastDigit >= 5 || exeption) {
-		return "Рублей.";
-	}
-	else if (lastDigit == 1) {
-		return "Рубль.";
-	}
-	else {
-		return "Рубля.";
-	}
-};
-//Выводит число словом для разряда тысяч.
-//Обробатывается два исключения, для 1 и 2
-std::string thousandExeption(short lastDigit,int numberDigit, int fullNumberDigit) {
-	if (fullNumberDigit == 3) {
-		switch (lastDigit)
-		{
-		case 1:
-			return "Одна";
-		case 2:
-			return "Две";
-		
-		}
-	}
-	return constants::units[lastDigit][numberDigit];
-}
 
-//Получение слова для разряда тысяч.
-std::string getThousand(short lastDigit, bool exeption) {
-	std::string thousand{ constants::ranks[0] };
-	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
-		return thousand + " ";
-	}
-	else if (lastDigit == 1) {
-		return thousand + "а ";
-	}
-	else {
-		return  thousand + "и ";
-	}
-}
-//Получения слова для всех разрядов, кроме тысяч. 
-std::string getAnyRanks(short fullNumberDigit, short lastDigit, bool exeption) {
-	std::string word{constants::ranks[fullNumberDigit -1]}; 
-	if (lastDigit == 0 || lastDigit >= 5 || exeption) {
-		return word + "ов ";
-	}
-	else if (lastDigit == 1) {
-		return word + " ";
-		
-	}
-	else {
-		return word + "а ";
-	}
-}
-//Получение слова для разрядов числа от тысячи.
-std::string getWordDigit(short fullNumberDigit,short lastDigit, bool exeption) {
-	fullNumberDigit /= 3;
-	switch (fullNumberDigit)
-	{
-	case 0:
-		return getRubles(lastDigit, exeption);
-		break;
-	case 1:
-		return getThousand(lastDigit, exeption);
-		break;
-	default:
-		return getAnyRanks(fullNumberDigit,lastDigit, exeption);
-		break;
-	}
-}
-//Обработка исключений для промежутка 10 <= number <=  19.
-std::string dozensExeption(int lastNumber, int numberDigit)
+
+
+std::string getNumberAsWords(unsigned long number) 
 {
-	++numberDigit;
-	if (lastNumber == 0) return "Десять "; 
-	std::string numberAsWord{ constants::units[lastNumber][0] };
-	if (lastNumber == 2) {
-		numberAsWord = changeEnding(numberAsWord, "е");
-	}
-	else if (lastNumber >= 4 && lastNumber <= 9) {
-		numberAsWord.erase(numberAsWord.end() - 1 );
-	}
-	return numberAsWord + "надцать";
-}
-
-//Изменение основных параметров.
-void changeParams(unsigned long long& fullNumber, int& numberDigit, int& fullNumberDigit) {
-	++numberDigit;
-	++fullNumberDigit;
-	fullNumber /= 10;
-}
-
-std::string getUnitsAsWord(unsigned long long& fullNumber,int& numberDigit, int& fullNumberDigit) {
-	int lastDigit{fullNumber % 10};
-	std::string numberAsWord{};
-	bool exeption{ (fullNumber / 10) % 10 == 1 && numberDigit == 0 };
-	std::string space{ lastDigit == 0 ? "" : " " };
-	if (fullNumberDigit % 3 == 0) {
-		numberAsWord = getWordDigit(fullNumberDigit, lastDigit, exeption);
-	}
-	if (exeption)
-	{
-		numberAsWord =  dozensExeption(lastDigit, numberDigit) + space + numberAsWord ;
-		changeParams(fullNumber, numberDigit, fullNumberDigit);
-	}
-	else {
-		
-		numberAsWord = thousandExeption(lastDigit,numberDigit,fullNumberDigit) + space + numberAsWord;
-	}
-
-
-	changeParams(fullNumber, numberDigit, fullNumberDigit);
-	if (numberDigit == 3) numberDigit = 0;
-	return numberAsWord;
-}
-
-
-
-std::string getNumberAsWords(unsigned long long number) {
 	if (!number) return "Ноль Рублей.";
-	int digit{ 0 };
-	int fullDigit{ 0 };
-	
-	std::string word{ "" };
+	unsigned short numberOfDigit{ 0 };
+	unsigned short digitArray[3];
+	//Обработка самой правой тройки чисел с валютой.
+	getDigitsInArray(number, digitArray, 3);
+	std::string numberName{getNumberNameWithValutes(digitArray[0],digitArray[1],digitArray[2])};
+	changeParams(&number);
 
-	do
+	while (number > 0)
 	{
-		word = getUnitsAsWord(number, digit, fullDigit) + word;
-		
-	} while (number > 0);
+		//Обработка чисел, начиная с разряда тысяч
+		getDigitsInArray(number,digitArray, 3);
+		numberName = getNumberName(digitArray[0],digitArray[1],digitArray[2], numberOfDigit / 3) + numberName;
+		changeParams( &number, &numberOfDigit );
+	} 
 
-	return word;
+	return numberName;
 }
 
+
+void changeParams(unsigned long* number,unsigned short* numberOfDigit)
+{
+	if(numberOfDigit)*numberOfDigit += 3;
+	*number /= 1000;
+}
+void getDigitsInArray(unsigned long number, unsigned short* numberArray,int arrSize) 
+{
+	for (int i = 0; i < arrSize; i++)
+	{
+		numberArray[i] = number % 10;
+		number /= 10;
+	}
+}
+
+//Получение названий чисел
+std::string getHundredName(unsigned short hundred)
+{
+	return constants::hundredsNames[hundred];
+}
+std::string getTenName(unsigned short ten, bool tenExeption)
+{
+	std::string tenName{ "" };
+	if (!tenExeption) 
+	{
+		tenName = constants::tensNames[ten];
+	}
+	return tenName;
+}
+std::string getUnitName(unsigned short unit, bool tenExeption, short digitRank = -1)
+{
+	//Инвертируется значения исключения
+	//В переменной isExeption хранится 0, если обрабатывается исключение десятков, в другом случае - 1
+	unsigned short isExeption{ !tenExeption };
+	//Обрабатывается исключение для тысяч, 0 - разряд тысяч, так как разряд с валютой обрабатывается отдельно.
+	if (digitRank == 0) 
+	{
+		//Если обрабатывается исключение для десятков, то в переменной isExeption хранится 0, 
+		//результатом данного выражения будет 0, что является индексом вложенного массива с исключением для десятков
+		//в массиве unitsName.
+		//если обрабатывается число, без исключения для десятков, то результатом данног выражения будет
+		//индекс вложенного массива, хрпанящего исключения для тысяч
+
+
+		isExeption *= constants::thousandExeptionIndex;
+	}
+	return constants::unitsNames[isExeption][unit];
+}
+std::string getRankName(unsigned short unit, bool tenExeption, unsigned short digitRank) 
+{
+	return constants::ranksNames[digitRank][!tenExeption * unit];
+}
+
+
+
+std::string getNumberName(unsigned short unit,  unsigned short ten, unsigned short hundred, unsigned short digitRank)
+{
+
+	int summAllDigits{ hundred + ten + unit };
+	
+	if (summAllDigits)
+	{
+		bool tensExeption{ ten == 1 };
+		return getHundredName(hundred) + getTenName(ten, tensExeption) 
+			+ getUnitName(unit, tensExeption, digitRank) + getRankName(unit, tensExeption, digitRank);
+	}
+	return "";
+}
+
+
+std::string getValuteName(unsigned short unit, bool tenExeption)
+{
+	//Если обрабатывается исключение по десяткам, то инвертированная переменная tenExeption будет возвращать 0,
+	//и результатом данного выражения всегда будет первая запись в массиве, которая хранит склонение слова для десяти.
+	//В ином случае результатом будет индекс для склонения числа, хранящегося в unit
+	return constants::valutes[!tenExeption * unit];
+}
+std::string getNumberNameWithValutes(unsigned short unit, unsigned short ten, unsigned short hundred)
+{
+	int summAllDigits{ hundred + ten + unit };
+
+	
+		bool tensExeption{ ten == 1 };
+		return getHundredName(hundred) + getTenName(ten, tensExeption)
+			+ getUnitName(unit, tensExeption) + getValuteName(unit, tensExeption);
+	
+}
+
+
+
+
+//std::string getRankName(unsigned short unit, bool tenExeption, unsigned short digitRank)
+//{
+//	switch (unit)
+//	{
+//	case 1:
+//		break;
+//	case 2:
+//	case 3:
+//	case 4:
+//
+//		break;
+//	default:
+//		break;
+//	}
+//	return constants::ranksNames[digitRank][!tenExeption * unit];
+//}
