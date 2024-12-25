@@ -61,24 +61,24 @@ std::string getTenName(unsigned short ten, bool tenExeption)
 	}
 	return tenName;
 }
+std::string getTenExeptionName(unsigned short unit) 
+{
+	return constants::tensExeption[unit];
+}
+
+std::string getThousandExeption( unsigned short unit)
+{
+	return constants::thousandExeption[unit];
+}
+
 std::string getUnitName(unsigned short unit, bool tenExeption, short digitRank = -1)
 {
-	//Инвертируется значения исключения
-	//В переменной isExeption хранится 0, если обрабатывается исключение десятков, в другом случае - 1
-	unsigned short isExeption{ !tenExeption };
-	//Обрабатывается исключение для тысяч, 0 - разряд тысяч, так как разряд с валютой обрабатывается отдельно.
-	if (digitRank == 0)
-	{
-		//Если обрабатывается исключение для десятков, то в переменной isExeption хранится 0, 
-		//результатом данного выражения будет 0, что является индексом вложенного массива с исключением для десятков
-		//в массиве unitsName.
-		//если обрабатывается число, без исключения для десятков, то результатом данног выражения будет
-		//индекс вложенного массива, хрпанящего исключения для тысяч
-
-
-		isExeption *= constants::thousandExeptionIndex;
-	}
-	return constants::unitsNames[isExeption][unit];
+	std::string word{ "" };
+	if (tenExeption)
+		word = getTenExeptionName(unit);
+	else
+		word = digitRank == 0 ? getThousandExeption(unit): constants::unitsNames[unit];
+	return word;
 }
 std::string getRankName(unsigned short unit, bool tenExeption, unsigned short digitRank)
 {
