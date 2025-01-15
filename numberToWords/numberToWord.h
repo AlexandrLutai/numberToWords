@@ -2,49 +2,23 @@
 #define NUMBERTOWORD
 #include<string>
 //10 в степени 
+enum orderOfDigits
+{
+	orderHundreds, orderTens, orderUnits, rankOrValute
+};
+
 namespace constants {
-	
-	const unsigned short thousandExeptionIndex{ 2 };
-	
-	const std::string valutes[]
-	{
-		"Рублей.", "Рубль.","Рубля.", "Рубля.", "Рубля.", "Рублей.", "Рублей.","Рублей.","Рублей.", "Рублей." ,
-	};
-
-	const std::string ranksNames[][10]
-	{
-		{"Тысяч ","Тысяча ","Тысячи ","Тысячи ","Тысячи ", "Тысяч ","Тысяч ","Тысяч ","Тысяч ","Тысяч "},
-		{"Миллионов ", "Миллион ", "Миллиона ","Миллиона ","Миллиона ","Миллионов ","Миллионов ","Миллионов ","Миллионов ","Миллионов "},
-		{"Миллиардов ", "Миллиард ", "Миллиарда ","Миллиарда ","Миллиарда ","Миллиардов ","Миллиардов ","Миллиардов ","Миллиардов ","Миллиардов "}
-	};
-	
-	const std::string tensNames[]
-	{
-		"","", "Двадцать ", "Тридцать ", "Сорок ", "Пятьдесят ", "Шестьдесят ", "Семьдесят ", "Восемьдесят ","Девяносто "
-	};
-	const std::string hundredsNames[]
-	{ 
-		"","Сто ", "Двести ","Триста ","Четыреста ","Пятьсот ","Шестьсот ","Семьсот ","Восемьсот ","Девятьсот " 
-	};
-
-
-	const std::string thousandExeption[]
-	{
-		"","Одна ", "Две ", "Три ", "Четыре ", "Пять ", "Шесть ", "Семь ", "Восемь ", "Девять "
-	};
-
-	const std::string tensExeption[]
-	{
-		"Десять ", "Одиннадцать ", "Двенадцать ", "Тринадцать ", "Четырнадцать ", "Пятнадцать ", "Шестнадцать ","Семнадцать ","Восемнадцать ", "Девятнадцать "
-	};
-
-	const std::string unitsNames[]
-	{
-
-		"","Один ", "Два ", "Три ", "Четыре ", "Пять ", "Шесть ", "Семь ", "Восемь ", "Девять "
-	};
-	
+	extern const std::string valutes[1][10];
+	extern const std::string ranks[][10];
+	extern const std::string tensInWords[];
+	extern const std::string hundredsInWords[];
+	extern const std::string thousandExeption[];
+	extern const std::string tensExeption[];
+	extern const std::string unitsInWords[];
+	extern const std::string* digitsInWordsArray[3];
 }
+
+
 
 std::string getNumberAsWords(unsigned long number);
 #endif // !NUMBERTOWORD
