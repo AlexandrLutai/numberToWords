@@ -38,68 +38,85 @@ namespace constants {
 
 	const std::string* digitsInWordsArrays[8][4]
 	{
-		{hundredsInWords, tensInWords, unitsInWords, *valutes}, {hundredsInWords,tensExeptionTensName, tensExeptionUnitName, *valutes},
+		{hundredsInWords, tensInWords, unitsInWords, *ranks}, {hundredsInWords,tensExeptionTensName, tensExeptionUnitName, *ranks},
 		{hundredsInWords, tensInWords, thousandExeption, *ranks}, {hundredsInWords, tensExeptionTensName, tensExeptionUnitName, *valutes},
 		{hundredsInWords, tensInWords, unitsInWords, *ranks}, {hundredsInWords, tensExeptionTensName, tensExeptionUnitName, *valutes},
 		{hundredsInWords, tensInWords, unitsInWords, *ranks}, {hundredsInWords, tensExeptionTensName, tensExeptionUnitName, *valutes},
 	};
 }
 
+struct Triplet
+{
+	unsigned short triplet[3]{ 0,0,0 };
+	Triplet operator=(Triplet paramTriplet) 
+	{
+		for (int position = 0; position < 3; position++)
+		{
+			triplet[position] = paramTriplet.triplet[position];
+		}
+		return *this;
+	}
+	explicit operator bool() const
+	{
+		return triplet[orderHundreds] + triplet[orderTens] + triplet[orderUnits] != 0;
+	}
+};
 
-
-int parseRightDigit(unsigned long number);
-std::string getUnitName(unsigned short unit, unsigned short rank, bool isTenExeption);
-std::string getTenName(unsigned short tens, unsigned short rank, bool isTenExeption);
-std::string getHundredName(unsigned short hundreds, unsigned short rank, bool tenExeption);
+//Объявление функций
+std::string getTripletName(Triplet triplet, int rank);
 std::string getRankName(unsigned short unit, unsigned short rank, bool tenExeption);
- 
-std::string(*funcArr[])(unsigned short unit, unsigned short rank, bool isTenExeption) {getHundredName,  getTenName, getUnitName};
+Triplet parceRightTriplet(unsigned long number);
+std::string getValuteName(unsigned  long number);
 
+
+
+//Определение функций
 std::string getNumberAsWords(unsigned  long number)
 {
 	if (!number) return "Ноль Рублей.";
-	std::string numberInWords{};
+	
+	std::string numberInWords{getValuteName(number)};
 	int rank{ 0 };
-	unsigned short triplet[3]{};
+	Triplet parsedTriplet{};
+	
 	while (number > 0)
 	{
-		//Получение триплета
-		for ( int position = 2; position >=0; position--)
-		{
-			triplet[position] = parseRightDigit(number);
-			number /= 10;
-		}
+		parsedTriplet = parceRightTriplet(number);
+		number /= 1000;
+		numberInWords = getTripletName(parsedTriplet, rank) + numberInWords;
 		rank += 2;
-
-		
-		if (!(triplet[orderUnits] + triplet[orderTens] + triplet[orderHundreds] + !rank)) //!!!! Убрать rank
-			continue;
-		
-
-		bool tenExeption{ triplet[orderTens] == 1 };
-		std::string tripletName = {};
-			
-		for (int i = 0; i < 3; i++)
-		{
-			std::string word{(*funcArr[i])(triplet[i], rank, tenExeption)};
-			tripletName += word;
-		}
-			
-		tripletName+= getRankName(triplet[orderUnits], rank, tenExeption);
-			
-		numberInWords = tripletName + numberInWords;
-		
-		
-
-		
-		 // 2 - пропускаем разряд целиком
-		
-	
 	}
 
 	return numberInWords;
 }
 
+std::string getTripletName(Triplet triplet, int rank)
+{
+	
+	if (!triplet) return "";
+
+	std::string tripletName{};
+	bool tenExeption{ triplet.triplet[orderTens] == 1 };
+	
+	for (int position = 0; position < 3; position++)
+	{
+		tripletName += *(constants::digitsInWordsArrays[rank + tenExeption][position] + triplet.triplet[position]);
+	}
+	
+	tripletName += getRankName(triplet.triplet[orderUnits], rank, tenExeption);
+	return tripletName;
+}
+
+Triplet parceRightTriplet(unsigned long number)
+{
+	Triplet triplet;
+	for (int position = 2; position >= 0; position--)
+	{
+		triplet.triplet[position] = number % 10;
+		number /= 10;
+	}
+	return triplet;
+}
 
 std::string getRankName( unsigned short unit, unsigned short rank, bool tenExeption)
 {
@@ -131,28 +148,13 @@ std::string getRankName( unsigned short unit, unsigned short rank, bool tenExept
 	return *(constants::digitsInWordsArrays[rank][rankOrValute] + elementPosition );
 }
 
-
-std::string getHundredName(unsigned short hundreds, unsigned short rank, bool tenExeption)
-{
-	//Фактич. одна строка.
-	return *(constants::digitsInWordsArrays[rank + tenExeption][orderHundreds] + hundreds);
+std::string getValuteName(unsigned  long number) {
+	bool tenExeption{ number % 100 / 10 == 1 };
+	return *(constants::valutes[0] + number % 10 * !tenExeption);
 }
 
-std::string getTenName(unsigned short ten, unsigned short rank, bool tenExeption)
-{
-	return *(constants::digitsInWordsArrays[rank][orderTens] + ten * !tenExeption);
 
-}
 
-std::string getUnitName(unsigned short unit, unsigned short rank, bool tenExeption)
-{
-	return *(constants::digitsInWordsArrays[rank + tenExeption][orderUnits] + unit);
-}
-
-int parseRightDigit(unsigned long number)
-{
-	return number % 10;
-}
 
 
 
